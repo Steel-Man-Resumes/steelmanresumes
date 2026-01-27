@@ -2,15 +2,15 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Steel Man Resumes | Truth. Told Strong.',
-  description: 'Job-ready resumes for blue-collar workers and second-chance candidates. Real talk, no BS. Based in Wisconsin, serving workers nationwide.',
-  keywords: 'resume service, blue collar resume, second chance employment, felony friendly jobs, employment gaps, Wisconsin resume service',
-  openGraph: {
-    title: 'Steel Man Resumes | Truth. Told Strong.',
-    description: 'Job-ready resumes for blue-collar workers and second-chance candidates. Real talk, no BS.',
-    type: 'website',
-    locale: 'en_US',
-    siteName: 'Steel Man Resumes',
+  title: 'Steel Man Resumes',
+  description: 'Professional resume services for blue-collar workers',
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: '/apple-touch-icon.png',
   },
 }
 
