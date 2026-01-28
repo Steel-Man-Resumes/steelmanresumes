@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import TMGSignatureBloom from './TMGSignatureBloom'
 
 export default function Footer() {
   return (
@@ -113,20 +114,22 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-steel-gold/10 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="text-ash-gray text-xs">
-            <p>© {new Date().getFullYear()} Steel Man Resumes LLC. All rights reserved.</p>
-            <p className="mt-1">
-              Crafted by <a href="https://themidnightgarden.club" target="_blank" rel="noopener noreferrer" className="text-steel-gold hover:text-bright-gold transition-colors">The Midnight Garden</a>
-            </p>
+        <div className="mt-12 pt-8 border-t border-steel-gold/10">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
+            <div className="text-ash-gray text-xs">
+              <p>© {new Date().getFullYear()} Steel Man Resumes LLC. All rights reserved.</p>
+            </div>
+            <div className="flex gap-6">
+              <Link href="/privacy" className="text-ash-gray text-xs hover:text-steel-gold transition-colors">
+                Privacy Policy
+              </Link>
+              <Link href="/terms" className="text-ash-gray text-xs hover:text-steel-gold transition-colors">
+                Terms of Service
+              </Link>
+            </div>
           </div>
-          <div className="flex gap-6">
-            <Link href="/privacy" className="text-ash-gray text-xs hover:text-steel-gold transition-colors">
-              Privacy Policy
-            </Link>
-            <Link href="/terms" className="text-ash-gray text-xs hover:text-steel-gold transition-colors">
-              Terms of Service
-            </Link>
+          <div className="flex justify-center">
+            <TMGSignatureBloom />
           </div>
         </div>
       </div>
