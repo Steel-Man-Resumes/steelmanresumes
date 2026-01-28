@@ -97,3 +97,20 @@ export function getGuidesByCategory(category: string): GuideMetadata[] {
 export function getAllGuides(): GuideMetadata[] {
   return guides;
 }
+
+// Map guide slugs to their infographic images
+export const guideImages: Record<string, string> = {
+  'felony-resume': '/infographic-resume-with-felony.png',
+  'employment-gaps': '/infographic-career-gaps.png',
+  'fair-chance-laws': '/infographic-ban-the-box.png',
+  'recovery-jobs': '/infographic-recovery.png',
+  'interview-scripts': '/hero-guide.jpg', // No specific infographic
+  'job-search-strategy': '/hero-guide.jpg', // No specific infographic
+  'certifications': '/hero-guide.jpg', // No specific infographic
+  'warehouse-resume': '/hero-guide.jpg', // No specific infographic
+  'trades-resume': '/hero-tools.jpg', // Tools theme
+};
+
+export function getGuideImage(slug: string): string {
+  return guideImages[slug] || '/hero-guide.jpg';
+}

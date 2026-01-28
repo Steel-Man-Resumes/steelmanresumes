@@ -21,7 +21,7 @@ export async function markdownToHtml(markdown: string): Promise<string> {
   return marked(markdown);
 }
 
-export async function loadSchema(filename: string): Promise<string | null> {
+export async function loadSchema(filename: string): Promise<any[] | null> {
   try {
     const filePath = path.join(SCHEMA_DIR, filename);
     const content = fs.readFileSync(filePath, 'utf-8');
@@ -31,8 +31,13 @@ export async function loadSchema(filename: string): Promise<string | null> {
 
     if (!scriptMatches) return null;
 
-    // Return all JSON-LD scripts
-    return scriptMatches.join('\n');
+    // Extract just the JSON content (without script tags) and parse
+    const schemas = scriptMatches.map(match => {
+      const jsonContent = match.replace(/<script type="application\/ld\+json">/, '').replace(/<\/script>/, '');
+      return JSON.parse(jsonContent.trim());
+    });
+
+    return schemas;
   } catch (error) {
     console.error(`Error loading schema ${filename}:`, error);
     return null;

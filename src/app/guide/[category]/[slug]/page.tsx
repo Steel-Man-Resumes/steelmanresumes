@@ -2,9 +2,10 @@ import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
-import { getGuideBySlug, getAllGuides } from '@/lib/guides';
+import { getGuideBySlug, getAllGuides, getGuideImage } from '@/lib/guides';
 import { loadMarkdown, markdownToHtml, loadSchema } from '@/lib/markdown';
 import { FadeUp } from '@/components/animations';
+import type { Metadata } from 'next';
 
 interface GuidePageProps {
   params: Promise<{
@@ -12,6 +13,8 @@ interface GuidePageProps {
     slug: string;
   }>;
 }
+
+const SITE_URL = 'https://steelmanresumes.com';
 
 export async function generateStaticParams() {
   const guides = getAllGuides();
@@ -21,7 +24,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: GuidePageProps) {
+export async function generateMetadata({ params }: GuidePageProps): Promise<Metadata> {
   const { category, slug } = await params;
   const guide = getGuideBySlug(category, slug);
 
@@ -31,15 +34,49 @@ export async function generateMetadata({ params }: GuidePageProps) {
     };
   }
 
-  // Load schema for metadata
-  const schema = await loadSchema(guide.schemaFile);
+  const canonicalUrl = `${SITE_URL}/guide/${category}/${slug}`;
+  const ogImage = getGuideImage(slug);
+  const fullImageUrl = `${SITE_URL}${ogImage}`;
 
   return {
     title: `${guide.title} | Steel Man Resumes`,
     description: guide.description,
-    other: schema ? {
-      'script:ld+json': schema,
-    } : {},
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title: guide.title,
+      description: guide.description,
+      url: canonicalUrl,
+      siteName: 'Steel Man Resumes',
+      type: 'article',
+      images: [
+        {
+          url: fullImageUrl,
+          width: 1200,
+          height: 630,
+          alt: guide.title,
+        },
+      ],
+      locale: 'en_US',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: guide.title,
+      description: guide.description,
+      images: [fullImageUrl],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
   };
 }
 
@@ -55,8 +92,8 @@ export default async function GuidePage({ params }: GuidePageProps) {
   const markdown = await loadMarkdown(guide.markdownFile);
   const htmlContent = await markdownToHtml(markdown);
 
-  // Load schema
-  const schema = await loadSchema(guide.schemaFile);
+  // Load schema (now returns parsed JSON objects)
+  const schemas = await loadSchema(guide.schemaFile);
 
   const categoryLabel = category === 'second-chance-employment'
     ? 'Second-Chance Employment'
@@ -64,13 +101,14 @@ export default async function GuidePage({ params }: GuidePageProps) {
 
   return (
     <>
-      {/* Inject schema into head */}
-      {schema && (
+      {/* Inject JSON-LD schemas into head */}
+      {schemas && schemas.map((schema, index) => (
         <script
+          key={index}
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: schema }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
         />
-      )}
+      ))}
 
       <Header />
 
