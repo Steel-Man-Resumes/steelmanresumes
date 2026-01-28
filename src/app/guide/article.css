@@ -1,0 +1,211 @@
+/* Article Content Styling */
+.article-content {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* Typography */
+.article-content h1 {
+  font-family: var(--font-headline);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #F5F5F0;
+  line-height: 1.2;
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+  padding-top: 1rem;
+}
+
+.article-content h2 {
+  font-family: var(--font-headline);
+  font-size: 2rem;
+  font-weight: 700;
+  color: #D4A84B;
+  line-height: 1.3;
+  margin-top: 4rem;
+  margin-bottom: 1.5rem;
+  padding-top: 2rem;
+  padding-bottom: 1rem;
+  border-top: 3px solid rgba(212, 168, 75, 0.3);
+  border-left: 4px solid #D4A84B;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.article-content h2::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(to bottom, #D4A84B, transparent);
+}
+
+.article-content h3 {
+  font-family: var(--font-headline);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #F5F5F0;
+  line-height: 1.4;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  padding-left: 1rem;
+  border-left: 3px solid rgba(212, 168, 75, 0.5);
+}
+
+.article-content p {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: rgba(245, 245, 240, 0.85);
+  margin-bottom: 1.5rem;
+}
+
+/* Strong/Bold text */
+.article-content strong {
+  color: #F5F5F0;
+  font-weight: 600;
+}
+
+/* Emphasis/Italic */
+.article-content em {
+  color: #D4A84B;
+  font-style: normal;
+  font-weight: 500;
+}
+
+/* Lists */
+.article-content ul,
+.article-content ol {
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+  padding-left: 0;
+  list-style: none;
+}
+
+.article-content li {
+  position: relative;
+  padding-left: 2rem;
+  margin-bottom: 1rem;
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: rgba(245, 245, 240, 0.85);
+}
+
+.article-content ul li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: #D4A84B;
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+.article-content ol {
+  counter-reset: list-counter;
+}
+
+.article-content ol li {
+  counter-increment: list-counter;
+}
+
+.article-content ol li::before {
+  content: counter(list-counter) ".";
+  position: absolute;
+  left: 0;
+  color: #D4A84B;
+  font-weight: bold;
+  font-family: var(--font-headline);
+}
+
+/* Blockquotes - Styled as callout boxes */
+.article-content blockquote {
+  background: rgba(26, 26, 26, 0.8);
+  border-left: 4px solid #D4A84B;
+  border-radius: 0.5rem;
+  padding: 1.5rem 2rem;
+  margin: 2rem 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.article-content blockquote p {
+  color: #F5F5F0;
+  font-size: 1.125rem;
+  margin-bottom: 0.5rem;
+}
+
+.article-content blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* Horizontal rules */
+.article-content hr {
+  border: none;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(212, 168, 75, 0.5),
+    transparent
+  );
+  margin: 3rem 0;
+}
+
+/* Links */
+.article-content a {
+  color: #D4A84B;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(212, 168, 75, 0.3);
+  transition: all 0.2s;
+}
+
+.article-content a:hover {
+  color: #E5BE6D;
+  border-bottom-color: #E5BE6D;
+}
+
+/* Code blocks */
+.article-content code {
+  background: rgba(26, 26, 26, 0.6);
+  color: #D4A84B;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.95em;
+  font-family: "Courier New", monospace;
+}
+
+.article-content pre {
+  background: rgba(26, 26, 26, 0.8);
+  border: 1px solid rgba(212, 168, 75, 0.2);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  overflow-x: auto;
+}
+
+.article-content pre code {
+  background: none;
+  padding: 0;
+}
+
+/* Tables (if any) */
+.article-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+}
+
+.article-content th {
+  background: rgba(212, 168, 75, 0.1);
+  color: #D4A84B;
+  font-weight: 600;
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 2px solid rgba(212, 168, 75, 0.3);
+}
+
+.article-content td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(212, 168, 75, 0.1);
+  color: rgba(245, 245, 240, 0.85);
+}

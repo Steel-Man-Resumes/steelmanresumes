@@ -2,10 +2,12 @@ import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
+import Image from 'next/image';
 import { getGuideBySlug, getAllGuides, getGuideImage } from '@/lib/guides';
 import { loadMarkdown, markdownToHtml, loadSchema } from '@/lib/markdown';
 import { FadeUp } from '@/components/animations';
 import type { Metadata } from 'next';
+import '../../article.css';
 
 interface GuidePageProps {
   params: Promise<{
@@ -99,6 +101,8 @@ export default async function GuidePage({ params }: GuidePageProps) {
     ? 'Second-Chance Employment'
     : 'Blue-Collar Careers';
 
+  const guideImage = getGuideImage(slug);
+
   return (
     <>
       {/* Inject JSON-LD schemas into head */}
@@ -131,52 +135,56 @@ export default async function GuidePage({ params }: GuidePageProps) {
         </section>
 
         {/* Article Content */}
-        <article className="py-12 md:py-20 bg-forge-black">
+        <article className="py-16 md:py-24 bg-forge-black">
           <div className="max-w-4xl mx-auto px-4">
             <FadeUp>
               {/* Category Badge */}
-              <div className="inline-block px-4 py-1 rounded-full bg-steel-gold/20 text-steel-gold text-sm font-medium mb-6">
-                {categoryLabel}
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-steel-gold/10 border border-steel-gold/30 mb-8">
+                <div className="w-2 h-2 rounded-full bg-steel-gold animate-pulse" />
+                <span className="text-steel-gold font-medium text-sm uppercase tracking-wide">
+                  {categoryLabel}
+                </span>
               </div>
 
               {/* Article Header */}
-              <h1 className="font-headline text-3xl sm:text-4xl md:text-5xl text-iron-white mb-6 leading-tight">
+              <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl text-iron-white mb-6 leading-[1.1] font-bold tracking-tight">
                 {guide.title}
               </h1>
 
-              <p className="text-xl text-ash-gray mb-12">
+              <p className="text-2xl text-ash-gray/90 mb-12 leading-relaxed font-light border-l-4 border-steel-gold pl-6">
                 {guide.description}
               </p>
+
+              {/* Featured Infographic */}
+              {guideImage && guideImage.includes('infographic') && (
+                <div className="my-12 rounded-xl overflow-hidden border-2 border-anvil-gray/30 shadow-2xl">
+                  <Image
+                    src={guideImage}
+                    alt={guide.title}
+                    width={1200}
+                    height={630}
+                    className="w-full h-auto"
+                    priority
+                  />
+                </div>
+              )}
             </FadeUp>
 
-            {/* Markdown Content */}
+            {/* Markdown Content with Enhanced Styling */}
             <FadeUp delay={0.1}>
               <div
-                className="prose prose-invert prose-lg max-w-none
-                  prose-headings:font-headline prose-headings:text-steel-gold
-                  prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6
-                  prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-4
-                  prose-p:text-ash-gray prose-p:leading-relaxed prose-p:mb-6
-                  prose-strong:text-iron-white prose-strong:font-semibold
-                  prose-em:text-steel-gold prose-em:not-italic
-                  prose-ul:text-ash-gray prose-ul:mb-6
-                  prose-li:mb-2
-                  prose-a:text-steel-gold prose-a:no-underline hover:prose-a:underline
-                  prose-hr:border-anvil-gray prose-hr:my-12
-                  prose-blockquote:border-l-steel-gold prose-blockquote:text-iron-white
-                  prose-code:text-steel-gold prose-code:bg-crucible-charcoal prose-code:px-2 prose-code:py-1 prose-code:rounded
-                "
+                className="article-content"
                 dangerouslySetInnerHTML={{ __html: htmlContent }}
               />
             </FadeUp>
 
-            {/* Navigation to other guides */}
-            <div className="mt-16 pt-12 border-t border-anvil-gray">
+            {/* Back Navigation */}
+            <div className="mt-20 pt-12 border-t-2 border-anvil-gray/30">
               <Link
                 href="/guide"
-                className="inline-flex items-center gap-2 text-steel-gold hover:text-bright-gold transition-colors"
+                className="inline-flex items-center gap-3 text-steel-gold hover:text-bright-gold transition-colors group text-lg font-medium"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
                 Back to All Guides
@@ -185,26 +193,70 @@ export default async function GuidePage({ params }: GuidePageProps) {
           </div>
         </article>
 
-        {/* CTA Section */}
-        <section className="relative py-20 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-crucible-charcoal to-forge-black" />
-          <div className="relative z-10 max-w-3xl mx-auto px-4 text-center">
+        {/* CTA Section - Enhanced */}
+        <section className="relative py-24 overflow-hidden">
+          {/* Background with gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-forge-black via-crucible-charcoal to-forge-black" />
+
+          {/* Gold accent line */}
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-steel-gold to-transparent" />
+
+          <div className="relative z-10 max-w-3xl mx-auto px-4">
             <FadeUp>
-              <h2 className="font-headline text-3xl sm:text-4xl text-iron-white mb-6">
-                READY FOR YOUR PERSONALIZED PLAN?
+              {/* Icon/Badge */}
+              <div className="flex justify-center mb-8">
+                <div className="w-20 h-20 rounded-full bg-steel-gold/10 border-2 border-steel-gold/30 flex items-center justify-center">
+                  <svg className="w-10 h-10 text-steel-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+              </div>
+
+              <h2 className="font-headline text-4xl sm:text-5xl text-center text-iron-white mb-6 leading-tight">
+                READY FOR YOUR<br />
+                <span className="text-steel-gold">PERSONALIZED PLAN?</span>
               </h2>
-              <p className="text-ash-gray text-lg mb-10">
-                Get a free Career Intelligence Report analyzing YOUR specific situation—no generic advice.
+
+              <p className="text-ash-gray text-xl text-center mb-12 leading-relaxed max-w-2xl mx-auto">
+                Get a free Career Intelligence Report analyzing <span className="text-iron-white font-semibold">YOUR specific situation</span>—no generic advice.
               </p>
-              <a
-                href="https://forge.steelmanresumes.com"
-                className="btn-gold text-lg py-4 px-10 inline-block"
-              >
-                Start Free Report Now →
-              </a>
-              <p className="text-ash-gray/60 text-sm mt-4">
-                5 minutes · No credit card · No commitment
-              </p>
+
+              {/* CTA Button - Enhanced */}
+              <div className="flex flex-col items-center gap-6">
+                <a
+                  href="https://forge.steelmanresumes.com"
+                  className="group relative inline-flex items-center gap-3 bg-gold-gradient text-forge-black font-bold text-xl py-6 px-12 rounded-lg shadow-[0_0_30px_rgba(212,168,75,0.3)] hover:shadow-[0_0_50px_rgba(212,168,75,0.5)] transition-all duration-300 hover:scale-105"
+                >
+                  <span>Start Free Report Now</span>
+                  <svg className="w-6 h-6 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </a>
+
+                {/* Sub-text */}
+                <div className="flex items-center gap-4 text-ash-gray/60 text-sm">
+                  <span className="flex items-center gap-2">
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                    </svg>
+                    5 minutes
+                  </span>
+                  <span>•</span>
+                  <span className="flex items-center gap-2">
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    No credit card
+                  </span>
+                  <span>•</span>
+                  <span className="flex items-center gap-2">
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    No commitment
+                  </span>
+                </div>
+              </div>
             </FadeUp>
           </div>
         </section>
