@@ -40,3 +40,6 @@ next-env.d.ts
 
 .vercel
 .env*.local
+
+# NotebookLM video drafts - not production ready
+video/
