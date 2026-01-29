@@ -50,8 +50,7 @@ export default function ContactPage() {
     setIsSubmitting(true)
 
     try {
-      // Replace YOUR_FORM_ID with actual Formspree ID
-      const response = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
+      const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -69,9 +68,13 @@ export default function ContactPage() {
 
       if (response.ok) {
         setSubmitted(true)
+      } else {
+        const errorData = await response.json()
+        alert(`Form submission failed: ${errorData.error || 'Unknown error'}`)
       }
     } catch (error) {
       console.error('Form submission error:', error)
+      alert('Failed to submit form. Please try again or email us directly at troyrichardcarr@gmail.com')
     } finally {
       setIsSubmitting(false)
     }
