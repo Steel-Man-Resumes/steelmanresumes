@@ -4,6 +4,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { FadeUp, StaggerContainer, StaggerItem, TiltCard } from '@/components/animations'
 import { useState } from 'react'
+import { submitContactForm } from '@/app/actions/contact'
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -45,32 +46,24 @@ export default function ContactPage() {
     other: "Whatever your situation, I've probably seen something similar. Tell me what's going on."
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
 
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          phone: formData.phone,
-          email: formData.email,
-          situation: situationOptions.find(s => s.value === formData.situation)?.label,
-          situationDetails: formData.situationDetails,
-          timeline: formData.timeline,
-          preferredContact: formData.preferredContact
-        })
-      })
+      const form = e.currentTarget
+      const formDataObj = new FormData(form)
 
-      if (response.ok) {
+      // Add situation label instead of value
+      const situationLabel = situationOptions.find(s => s.value === formData.situation)?.label || formData.situation
+      formDataObj.set('situation', situationLabel)
+
+      const result = await submitContactForm(formDataObj)
+
+      if (result.success) {
         setSubmitted(true)
       } else {
-        const errorData = await response.json()
-        alert(`Form submission failed: ${errorData.error || 'Unknown error'}`)
+        alert(`Form submission failed: ${result.error || 'Unknown error'}`)
       }
     } catch (error) {
       console.error('Form submission error:', error)
@@ -212,6 +205,7 @@ export default function ContactPage() {
                         </label>
                         <input
                           type="text"
+                          name="name"
                           required
                           value={formData.name}
                           onChange={(e) => setFormData({...formData, name: e.target.value})}
@@ -236,7 +230,7 @@ export default function ContactPage() {
                               className={`flex-1 p-4 rounded-lg border cursor-pointer transition-all ${formData.preferredContact === opt.value ? 'border-steel-gold bg-steel-gold/10' : 'border-anvil-gray hover:border-steel-gold/50'}`}
                             >
                               <input
-                                type="radio"
+                                type="radio" name="preferredContact"
                                 name="preferredContact"
                                 value={opt.value}
                                 checked={formData.preferredContact === opt.value}
@@ -257,6 +251,7 @@ export default function ContactPage() {
                         </label>
                         <input
                           type="tel"
+                          name="phone"
                           required={formData.preferredContact !== 'email'}
                           value={formData.phone}
                           onChange={(e) => setFormData({...formData, phone: e.target.value})}
@@ -272,6 +267,7 @@ export default function ContactPage() {
                         </label>
                         <input
                           type="email"
+                          name="email"
                           required={formData.preferredContact === 'email'}
                           value={formData.email}
                           onChange={(e) => setFormData({...formData, email: e.target.value})}
@@ -285,7 +281,7 @@ export default function ContactPage() {
                         <label className="block text-iron-white text-sm font-medium mb-2">
                           What's your situation?
                         </label>
-                        <select
+                        <select name="situation"
                           value={formData.situation}
                           onChange={(e) => setFormData({...formData, situation: e.target.value})}
                           className="w-full bg-anvil-gray border border-anvil-gray focus:border-steel-gold rounded-lg px-4 py-3 text-iron-white outline-none transition-colors"
@@ -325,7 +321,7 @@ export default function ContactPage() {
                         
                         {expandedSections.details && (
                           <div className="mt-4">
-                            <textarea
+                            <textarea name="situationDetails"
                               value={formData.situationDetails}
                               onChange={(e) => setFormData({...formData, situationDetails: e.target.value})}
                               rows={4}
@@ -351,7 +347,7 @@ export default function ContactPage() {
                               className={`p-3 rounded-lg border text-center cursor-pointer transition-all text-sm ${formData.timeline === time ? 'border-steel-gold bg-steel-gold/10 text-iron-white' : 'border-anvil-gray text-ash-gray hover:border-steel-gold/50'}`}
                             >
                               <input
-                                type="radio"
+                                type="radio" name="preferredContact"
                                 name="timeline"
                                 value={time}
                                 checked={formData.timeline === time}
