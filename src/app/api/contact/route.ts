@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
 
     // Send email using Resend
     const { data, error } = await resend.emails.send({
-      from: 'SMR Contact Form <contact@steelmanresumes.com>',
+      from: 'SMR Contact Form <onboarding@resend.dev>',
       to: ['troyrichardcarr@gmail.com'],
       replyTo: email,
       subject: `🔥 New Contact Form Submission from ${name}`,
