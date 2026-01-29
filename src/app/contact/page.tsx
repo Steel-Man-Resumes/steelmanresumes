@@ -230,7 +230,7 @@ export default function ContactPage() {
                               className={`flex-1 p-4 rounded-lg border cursor-pointer transition-all ${formData.preferredContact === opt.value ? 'border-steel-gold bg-steel-gold/10' : 'border-anvil-gray hover:border-steel-gold/50'}`}
                             >
                               <input
-                                type="radio" name="preferredContact"
+                                type="radio"
                                 name="preferredContact"
                                 value={opt.value}
                                 checked={formData.preferredContact === opt.value}
@@ -347,7 +347,7 @@ export default function ContactPage() {
                               className={`p-3 rounded-lg border text-center cursor-pointer transition-all text-sm ${formData.timeline === time ? 'border-steel-gold bg-steel-gold/10 text-iron-white' : 'border-anvil-gray text-ash-gray hover:border-steel-gold/50'}`}
                             >
                               <input
-                                type="radio" name="preferredContact"
+                                type="radio"
                                 name="timeline"
                                 value={time}
                                 checked={formData.timeline === time}
