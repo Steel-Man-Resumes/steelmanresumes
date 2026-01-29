@@ -1,8 +1,46 @@
 'use server'
 
 import { Resend } from 'resend';
+import { headers } from 'next/headers';
+
+// Simple in-memory rate limiting (resets on server restart)
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+
+function getClientIP(): string {
+  const headersList = headers();
+  const forwarded = headersList.get('x-forwarded-for');
+  return forwarded ? forwarded.split(',')[0].trim() : 'unknown';
+}
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const limit = rateLimitMap.get(ip);
+
+  if (!limit || now > limit.resetTime) {
+    rateLimitMap.set(ip, { count: 1, resetTime: now + 60 * 60 * 1000 });
+    return true;
+  }
+
+  if (limit.count >= 5) {
+    return false;
+  }
+
+  limit.count++;
+  return true;
+}
 
 export async function submitContactForm(formData: FormData) {
+  const ip = getClientIP();
+
+  // Check rate limit: 5 submissions per hour
+  if (!checkRateLimit(ip)) {
+    console.log(`[CONTACT FORM] Rate limit exceeded: ${ip}`);
+    return {
+      success: false,
+      error: 'Too many submissions. Please try again in an hour or call (262) 391-8137.'
+    };
+  }
+
   const resend = new Resend(process.env.RESEND_API_KEY);
 
   const name = formData.get('name') as string;
